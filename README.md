@@ -31,7 +31,6 @@ This tool works with any PC game using 3DMigoto and INI-based runtime logic, inc
 - Genshin Impact
 - Honkai Star Rail
 - Zenless Zone Zero
-(Compatibility depends on the game’s mod loader, not the engine)
 
 ## Why This Is Needed
 Running multiple active `.ini` mods (for example, different cosmetics for the same character) at the same time can cause:
