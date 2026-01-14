@@ -119,7 +119,7 @@ set "PACK_INI_COUNT=0"
 for /f "usebackq delims=" %%F in (`powershell -NoProfile -NoLogo -Command ^
   "$files = Get-ChildItem -LiteralPath . -Filter *.ini -File | Where-Object { " ^
   "  try { $t = Get-Content -LiteralPath $_.FullName -Raw; " ^
-  "        ($t -match '(?im)^\s*;\s*#MOD_PACK_ROOT\s+v[0-9]+\.[0-9]+\.[0-9]+') -and ($t -match '(?im)^\s*\[KeyPackNext\]\s*$') } catch { $false }" ^
+  "        ($t -match '(?im)^\s*;\s*#MOD_PACK_ROOT\s+v[0-9]+\.[0-9]+\.[0-9]+') -and ($t -match '(?im)^\s*\[KeyPackCycle\]\s*$') } catch { $false }" ^
   "}; " ^
   "$files | ForEach-Object { $_.Name }"`) do (
   set /a PACK_INI_COUNT+=1
@@ -143,7 +143,7 @@ if not "!PACK_INI_COUNT!"=="1" (
   powershell -NoProfile -NoLogo -Command ^
     "Get-ChildItem -LiteralPath . -Filter *.ini -File | Where-Object { " ^
     "  try { $t = Get-Content -LiteralPath $_.FullName -Raw; " ^
-    "        ($t -match '(?im)^\s*;\s*#MOD_PACK_ROOT\s+v[0-9]+\.[0-9]+\.[0-9]+') -and ($t -match '(?im)^\s*\[KeyPackNext\]\s*$') } catch { $false }" ^
+    "        ($t -match '(?im)^\s*;\s*#MOD_PACK_ROOT\s+v[0-9]+\.[0-9]+\.[0-9]+') -and ($t -match '(?im)^\s*\[KeyPackCycle\]\s*$') } catch { $false }" ^
     "} | ForEach-Object { '  - ' + $_.Name }"
   call :TAG DIM "Keep ONLY one pack ini in this folder, then try again."
   echo.
@@ -709,7 +709,7 @@ function IsGeneratedPackIni([string]$path){
   try{
     $t = [System.IO.File]::ReadAllText($path)
     return ($t -match '(?im)^\s*;\s*#MOD_PACK_ROOT\s+v[0-9]+\.[0-9]+\.[0-9]+') -and
-           ($t -match '(?im)^\s*\[KeyPackNext\]\s*$')
+           ($t -match '(?im)^\s*\[KeyPackCycle\]\s*$')
   } catch { return $false }
 }
 
@@ -736,15 +736,9 @@ function ParsePackMods([string]$packPath){
 
   $nk = $null; $pk = $null
   for($i=0;$i -lt $lines.Count;$i++){
-    if($lines[$i].Trim() -ieq "[KeyPackNext]"){
+    if($lines[$i].Trim() -ieq "[KeyPackCycle]"){
       for($j=$i+1;$j -lt [Math]::Min($i+12,$lines.Count);$j++){
         if($lines[$j] -match '^\s*key\s*=\s*(.+?)\s*$'){ $nk = $matches[1].Trim(); break }
-        if($lines[$j].Trim().StartsWith("[")) { break }
-      }
-    }
-    if($lines[$i].Trim() -ieq "[KeyPackPrev]"){
-      for($j=$i+1;$j -lt [Math]::Min($i+12,$lines.Count);$j++){
-        if($lines[$j] -match '^\s*key\s*=\s*(.+?)\s*$'){ $pk = $matches[1].Trim(); break }
         if($lines[$j].Trim().StartsWith("[")) { break }
       }
     }
@@ -831,15 +825,11 @@ function WritePackIni([string]$packPath, [string]$packNs, [object[]]$mods, [stri
   $L.Add("[Constants]")
   $L.Add("global persist $" + $swapvar + " = 0")
   $L.Add("")
-  $L.Add("[KeyPackNext]")
+  $L.Add("[KeyPackCycle]")
   $L.Add("key = " + $nk)
+  $L.Add("back = " + $pk)
   $L.Add("type = cycle")
   $L.Add("$" + $swapvar + " = " + ($cycle -join ","))
-  $L.Add("")
-  $L.Add("[KeyPackPrev]")
-  $L.Add("key = " + $pk)
-  $L.Add("type = cycle")
-  $L.Add("$" + $swapvar + " = " + ($rev -join ","))
   $L.Add("")
   $L.Add("; ==========================================================")
   $L.Add("; IMPORTANT: Do not DELETE or MODIFY the line below!")
@@ -1151,17 +1141,11 @@ $master.Add("")
 $master.Add("[Constants]")
 $master.Add("global persist $" + $swapvar + " = 0")
 $master.Add("")
-$master.Add("[KeyPackNext]")
+$master.Add("[KeyPackCycle]")
 $master.Add("key = " + $NextKey)
+$master.Add("back = " + $PrevKey)
 $master.Add("type = cycle")
 $master.Add("$" + $swapvar + " = " + ((0..$Mods.Count) -join ","))
-$master.Add("")
-$master.Add("[KeyPackPrev]")
-$master.Add("key = " + $PrevKey)
-$master.Add("type = cycle")
-$rev = @("0")
-for($j=$Mods.Count;$j -ge 1;$j--){ $rev += [string]$j }
-$master.Add("$" + $swapvar + " = " + ($rev -join ","))
 $master.Add("")
 $master.Add("; ==========================================================")
 $master.Add("; IMPORTANT: Do not DELETE or MODIFY the line below!")
