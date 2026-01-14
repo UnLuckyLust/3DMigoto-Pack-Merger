@@ -2,7 +2,7 @@
 setlocal EnableExtensions EnableDelayedExpansion
 title 3DMigoto Mod Pack Merger
 cd /d "%~dp0"
-set "Version=1.0.0"
+set "Version=1.0.1"
 
 rem ===================================
 rem  USER CONFIG (these can be changed)
@@ -1166,3 +1166,4 @@ for($i=0;$i -lt $Mods.Count;$i++){
 Write-Host "OK: Pack ini -> $masterPath"
 Write-Host "OK: Patched mod inis (namespaces + gated overrides)"
 ###PS_END
+
