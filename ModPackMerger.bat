@@ -3,7 +3,7 @@ setlocal EnableExtensions EnableDelayedExpansion
 title 3DMigoto Mod Pack Merger
 pushd "%~dp0"
 set "ROOT=%CD%"
-set "Version=1.0.2"
+set "Version=1.0.3"
 
 rem ===================================
 rem  USER CONFIG (these can be changed)
@@ -890,7 +890,7 @@ function Patch-Ini([string]$iniPath, [string]$packNs, [string]$modNs, [int]$idx)
   $armed      = $false
   $didIf      = $false
 
-  $ifLine = "if `$" + $packNs + "\Master\$$swapvar == $idx"
+  $ifLine = "if `$\" + $packNs + "\Master\$$swapvar == $idx"
 
   foreach($line in $lines){
     $m = $rxSection.Match($line)
