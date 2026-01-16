@@ -1,8 +1,9 @@
 @echo off
 setlocal EnableExtensions EnableDelayedExpansion
 title 3DMigoto Mod Pack Merger
-cd /d "%~dp0"
-set "Version=1.0.1"
+pushd "%~dp0"
+set "ROOT=%CD%"
+set "Version=1.0.2"
 
 rem ===================================
 rem  USER CONFIG (these can be changed)
@@ -17,7 +18,7 @@ call :BANNER
 :ASK_NAME
 set "DEFAULT_PACK="
 for /f "usebackq delims=" %%P in (`powershell -NoProfile -NoLogo -Command ^
-  "$root = (Get-Location).Path; " ^
+  "$root = '%ROOT%'; " ^
   "$rx = '(?im)^\s*;\s*#MOD_PACK_ROOT\s+v[0-9]+\.[0-9]+\.[0-9]+'; " ^
   "$packs = Get-ChildItem -LiteralPath $root -File -Filter '*.ini' -ErrorAction SilentlyContinue | " ^
   "  Where-Object { try { ([IO.File]::ReadAllText($_.FullName) -match $rx) } catch { $false } }; " ^
@@ -83,7 +84,7 @@ powershell -NoProfile -NoLogo -NonInteractive -ExecutionPolicy Bypass -Command ^
   "$m = [regex]::Match($bat,'###PS_BEGIN\r?\n(.*?)\r?\n###PS_END','Singleline'); " ^
   "if(-not $m.Success){ throw 'Embedded PS script not found.' } " ^
   "$sb = [scriptblock]::Create($m.Groups[1].Value); " ^
-  "& $sb -Pack '%CHAR_NAME%' -ModsJoined '%MODS_JOINED%' -NextKey '%CYCLE_NEXT_KEY%' -PrevKey '%CYCLE_PREV_KEY%' -NextPretty '%NEXT_PRETTY%' -PrevPretty '%PREV_PRETTY%' -PackVersion '%Version%'" ^
+  "& $sb -Root '%ROOT%' -Pack '%CHAR_NAME%' -ModsJoined '%MODS_JOINED%' -NextKey '%CYCLE_NEXT_KEY%' -PrevKey '%CYCLE_PREV_KEY%' -NextPretty '%NEXT_PRETTY%' -PrevPretty '%PREV_PRETTY%' -PackVersion '%Version%'" ^
   1>"%LOG_OUT%" 2>"%LOG_ERR%"
 endlocal
 
@@ -117,7 +118,7 @@ set "PACK_INI="
 set "PACK_INI_COUNT=0"
 
 for /f "usebackq delims=" %%F in (`powershell -NoProfile -NoLogo -Command ^
-  "$files = Get-ChildItem -LiteralPath . -Filter *.ini -File | Where-Object { " ^
+  "$files = Get-ChildItem -LiteralPath '%ROOT%' -Filter *.ini -File | Where-Object { " ^
   "  try { $t = Get-Content -LiteralPath $_.FullName -Raw; " ^
   "        ($t -match '(?im)^\s*;\s*#MOD_PACK_ROOT\s+v[0-9]+\.[0-9]+\.[0-9]+') -and ($t -match '(?im)^\s*\[KeyPackCycle\]\s*$') } catch { $false }" ^
   "}; " ^
@@ -141,7 +142,7 @@ if not "!PACK_INI_COUNT!"=="1" (
   call :TAG ERR "Faild to add mods to pack"
   call :TAG DIM "More than one generated pack ini was found in this folder:"
   powershell -NoProfile -NoLogo -Command ^
-    "Get-ChildItem -LiteralPath . -Filter *.ini -File | Where-Object { " ^
+    "Get-ChildItem -LiteralPath '%ROOT%' -Filter *.ini -File | Where-Object { " ^
     "  try { $t = Get-Content -LiteralPath $_.FullName -Raw; " ^
     "        ($t -match '(?im)^\s*;\s*#MOD_PACK_ROOT\s+v[0-9]+\.[0-9]+\.[0-9]+') -and ($t -match '(?im)^\s*\[KeyPackCycle\]\s*$') } catch { $false }" ^
     "} | ForEach-Object { '  - ' + $_.Name }"
@@ -169,7 +170,7 @@ powershell -NoProfile -NoLogo -NonInteractive -ExecutionPolicy Bypass -Command ^
   "$m = [regex]::Match($bat,'###PS_BEGIN\r?\n(.*?)\r?\n###PS_END','Singleline'); " ^
   "if(-not $m.Success){ throw 'Embedded PS script not found.' } " ^
   "$sb = [scriptblock]::Create($m.Groups[1].Value); " ^
-  "& $sb -Add -ModsJoined '%MODS_JOINED%' -NextKey '%CYCLE_NEXT_KEY%' -PrevKey '%CYCLE_PREV_KEY%' -NextPretty '%NEXT_PRETTY%' -PrevPretty '%PREV_PRETTY%' -PackVersion '%Version%'" ^
+  "& $sb -Root '%ROOT%' -Add -PackIni '%PACK_INI%' -ModsJoined '%MODS_JOINED%' -NextKey '%CYCLE_NEXT_KEY%' -PrevKey '%CYCLE_PREV_KEY%' -NextPretty '%NEXT_PRETTY%' -PrevPretty '%PREV_PRETTY%' -PackVersion '%Version%'" ^
   1>"%LOG_OUT%" 2>"%LOG_ERR%"
 endlocal
 
@@ -212,7 +213,7 @@ powershell -NoProfile -NoLogo -NonInteractive -ExecutionPolicy Bypass -Command ^
   "$m = [regex]::Match($bat,'###PS_BEGIN\r?\n(.*?)\r?\n###PS_END','Singleline'); " ^
   "if(-not $m.Success){ throw 'Embedded PS script not found.' } " ^
   "$sb = [scriptblock]::Create($m.Groups[1].Value); " ^
-  "& $sb -Restore -PackVersion '%Version%'" ^
+  "& $sb -Root '%ROOT%' -Restore -PackVersion '%Version%'" ^
   1>"%LOG_OUT%" 2>"%LOG_ERR%"
 endlocal
 
@@ -221,7 +222,6 @@ set "PSERR=%ERRORLEVEL%"
 echo.
 if not "%PSERR%"=="0" (
   call :TAG ERR "Faild to restore mods"
-  call :TAG DIM "No *.ini.disabled backup files were found"
   call :TAG DIM "Error details saved to: %LOG_ERR%"
   echo.
   call :TAG INPUT "Press any key to restart..."
@@ -311,7 +311,7 @@ powershell -NoProfile -NoLogo -NonInteractive -ExecutionPolicy Bypass -Command ^
   "$m = [regex]::Match($bat,'###PS_BEGIN\r?\n(.*?)\r?\n###PS_END','Singleline'); " ^
   "if(-not $m.Success){ throw 'Embedded PS script not found.' } " ^
   "$sb = [scriptblock]::Create($m.Groups[1].Value); " ^
-  "& $sb -RestoreOne -ModFolder '%TARGET%' -PackVersion '%Version%'" ^
+  "& $sb -Root '%ROOT%' -RestoreOne -ModFolder '%TARGET%' -PackVersion '%Version%'" ^
   1>"%LOG_OUT%" 2>"%LOG_ERR%"
 endlocal
 
@@ -369,13 +369,12 @@ set "MODS_JOINED="
 for /l %%I in (0,1,%END%) do (
   if defined MOD_%%I (
     if defined MODS_JOINED (
-      set "MODS_JOINED=!MODS_JOINED!|!MOD_%%I!"
+      set "MODS_JOINED=!MODS_JOINED!;;!MOD_%%I!"
     ) else (
       set "MODS_JOINED=!MOD_%%I!"
     )
   )
 )
-
 exit /b 0
 
 :RESTART_MSG
@@ -416,6 +415,10 @@ call :TAG DIM "===================================================="
 echo.
 exit /b 0
 
+:init_ansi
+for /f %%A in ('echo prompt $E ^| cmd') do set "ESC=%%A"
+exit /b 0
+
 :TAG
 setlocal DisableDelayedExpansion
 set "TYPE=%~1"
@@ -429,10 +432,6 @@ if /I "%TYPE%"=="INFO" set "C=%ESC%[95m"
 if /I "%TYPE%"=="DIM" set "C=%ESC%[90m"
 echo(%C%%MSG%%ESC%[0m
 endlocal
-exit /b 0
-
-:init_ansi
-for /f %%A in ('echo prompt $E ^| cmd') do set "ESC=%%A"
 exit /b 0
 
 :vk_pretty
@@ -664,6 +663,8 @@ rem ==================
 
 ###PS_BEGIN
 param(
+  [string]$Root,
+  [string]$PackIni,
   [string]$PackVersion,
   [string]$Pack,
   [string]$ModsJoined,
@@ -681,7 +682,12 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
-$root = (Get-Location).Path
+
+$root = (Resolve-Path -LiteralPath $Root).Path
+if(Test-Path -LiteralPath $root -PathType Leaf){
+  $root = Split-Path -LiteralPath $root -Parent
+}
+
 $utf8NoBom = [System.Text.UTF8Encoding]::new($false)
 
 $swapvar = "swapvar"
@@ -691,7 +697,7 @@ function Sanitize([string]$s){
   ($s -replace '\s+','' -replace '[^A-Za-z0-9_\-]','')
 }
 
-if([string]::IsNullOrWhiteSpace($PackVersion)){ $PackVersion = "unknown" }
+if([string]::IsNullOrWhiteSpace($PackVersion)){ $PackVersion = "0.0.0" }
 if([string]::IsNullOrWhiteSpace($NextKey)){ $NextKey = 'VK_RIGHT' }
 if([string]::IsNullOrWhiteSpace($PrevKey)){ $PrevKey = 'VK_LEFT' }
 if([string]::IsNullOrWhiteSpace($NextPretty)){ $NextPretty = $NextKey }
@@ -714,7 +720,7 @@ function IsGeneratedPackIni([string]$path){
 }
 
 function GetSinglePackIniInRoot(){
-  $candidates = Get-ChildItem -Path $root -File -Filter "*.ini" -ErrorAction SilentlyContinue |
+  $candidates = Get-ChildItem -LiteralPath $root -File -Filter "*.ini" -ErrorAction SilentlyContinue |
     Where-Object { IsGeneratedPackIni $_.FullName }
   if(-not $candidates -or $candidates.Count -eq 0){ throw "No generated pack ini found in root." }
   if($candidates.Count -gt 1){
@@ -738,9 +744,11 @@ function ParsePackMods([string]$packPath){
   for($i=0;$i -lt $lines.Count;$i++){
     if($lines[$i].Trim() -ieq "[KeyPackCycle]"){
       for($j=$i+1;$j -lt [Math]::Min($i+12,$lines.Count);$j++){
-        if($lines[$j] -match '^\s*key\s*=\s*(.+?)\s*$'){ $nk = $matches[1].Trim(); break }
+        if($lines[$j] -match '^\s*key\s*=\s*(.+?)\s*$'){  $nk = $matches[1].Trim(); continue }
+        if($lines[$j] -match '^\s*back\s*=\s*(.+?)\s*$'){ $pk = $matches[1].Trim(); continue }
         if($lines[$j].Trim().StartsWith("[")) { break }
       }
+      break
     }
   }
 
@@ -763,14 +771,6 @@ function ParsePackMods([string]$packPath){
   }
 }
 
-function GetMaxIndex([object[]]$mods){
-  $max = 0
-  foreach($m in $mods){
-    if($m.Index -gt $max){ $max = $m.Index }
-  }
-  return $max
-}
-
 function IsPackRootIni([string]$path){
   try{
     $t = [System.IO.File]::ReadAllText($path)
@@ -783,7 +783,7 @@ function CleanupOldPackRootInis([string]$keepFullPath){
 
   $deleted = New-Object System.Collections.Generic.List[string]
 
-  $candidates = Get-ChildItem -Path $root -File -Filter "*.ini" -ErrorAction SilentlyContinue |
+  $candidates = Get-ChildItem -LiteralPath $root -File -Filter "*.ini" -ErrorAction SilentlyContinue |
     Where-Object { IsPackRootIni $_.FullName }
 
   foreach($f in $candidates){
@@ -801,11 +801,10 @@ function CleanupOldPackRootInis([string]$keepFullPath){
 }
 
 function WritePackIni([string]$packPath, [string]$packNs, [object[]]$mods, [string]$nk, [string]$pk){
-  if([string]::IsNullOrWhiteSpace($nk)){ $nk = 'VK_RIGHT' }
-  if([string]::IsNullOrWhiteSpace($pk)){ $pk = 'VK_LEFT' }
+  if([string]::IsNullOrWhiteSpace($nk)){ $nk = $NextKey }
+  if([string]::IsNullOrWhiteSpace($pk)){ $pk = $PrevKey }
 
   $cycle = @("0") + ($mods | Sort-Object Index | ForEach-Object { [string]$_.Index })
-  $rev   = @("0") + ($mods | Sort-Object Index -Descending | ForEach-Object { [string]$_.Index })
 
   $L = New-Object System.Collections.Generic.List[string]
   $L.Add("; " + ([System.IO.Path]::GetFileNameWithoutExtension($packPath)) + " Mod Pack")
@@ -859,6 +858,13 @@ $rxMatchPr = [regex]::new('^\s*match_priority\s*=', 'IgnoreCase,Compiled')
 $rxNsLine = [regex]::new('^\s*namespace\s*=', 'IgnoreCase,Compiled')
 
 function Patch-Ini([string]$iniPath, [string]$packNs, [string]$modNs, [int]$idx){
+  if([string]::IsNullOrWhiteSpace($iniPath)){
+    throw "Patch-Ini called with empty iniPath (idx=$idx, packNs=$packNs, modNs=$modNs)"
+  }
+  if(-not (Test-Path -LiteralPath $iniPath -PathType Leaf)){
+    throw "INI file not found: $iniPath"
+  }
+
   $bak = $iniPath + ".disabled"
   if(Test-Path -LiteralPath $bak){
     $text = [System.IO.File]::ReadAllText($bak)
@@ -884,7 +890,7 @@ function Patch-Ini([string]$iniPath, [string]$packNs, [string]$modNs, [int]$idx)
   $armed      = $false
   $didIf      = $false
 
-  $ifLine = "if `$\$packNs\Master\$swapvar==$idx"
+  $ifLine = "if `$" + $packNs + "\Master\$$swapvar == $idx"
 
   foreach($line in $lines){
     $m = $rxSection.Match($line)
@@ -940,12 +946,31 @@ function Patch-Ini([string]$iniPath, [string]$packNs, [string]$modNs, [int]$idx)
 
 function Patch-ModFolder([string]$folder, [string]$packNs, [int]$idx){
   $modDir = Join-Path $root $folder
-  if(-not (Test-Path -LiteralPath $modDir -PathType Container)){ throw "Missing folder: $folder" }
+  if(-not (Test-Path -LiteralPath $modDir -PathType Container)){
+    throw "Missing folder: $folder (resolved: $modDir)"
+  }
 
   $modNs = Sanitize $folder
 
-  $inis = Get-ChildItem -Path $modDir -Recurse -Filter *.ini -File -ErrorAction SilentlyContinue |
-    Where-Object { $_.FullName -notmatch '(?i)disabled' -and $_.Name -notmatch '(?i)^DISABLED' }
+  $dirs = Get-ChildItem -LiteralPath $modDir -Directory -Recurse -Force -ErrorAction Stop |
+    Where-Object { -not ($_.Attributes -band [IO.FileAttributes]::ReparsePoint) }
+
+  $dirs = @((Get-Item -LiteralPath $modDir)) + $dirs
+  $dirs = $dirs | Sort-Object FullName -Unique
+
+  $inis = @(
+    foreach($d in $dirs){
+      Get-ChildItem -LiteralPath $d.FullName -File -Filter "*.ini" -Force -ErrorAction SilentlyContinue
+    }
+  ) | Where-Object {
+    $_ -and $_.FullName -and
+    $_.FullName -notmatch '(?i)\.ini\.disabled$' -and
+    $_.Name -notmatch '(?i)^DISABLED'
+  }
+
+  if(-not $inis -or $inis.Count -eq 0){
+    throw "No .ini files found to patch in: $modDir"
+  }
 
   foreach($ini in $inis){
     Patch-Ini $ini.FullName $packNs $modNs $idx
@@ -973,21 +998,44 @@ function Renumber-And-RepatchMods([object]$info){
 # restore all mods
 # ----------------
 
+function Get-SafeDirs([string]$base){
+  $baseItem = Get-Item -LiteralPath $base -ErrorAction Stop
+
+  $dirs = Get-ChildItem -LiteralPath $base -Directory -Recurse -Force -ErrorAction Stop |
+    Where-Object { -not ($_.Attributes -band [IO.FileAttributes]::ReparsePoint) }
+
+  $dirs = @($baseItem) + $dirs
+  $dirs | Sort-Object FullName -Unique
+}
+
 function Restore-All {
   $restored = 0
 
-  $disabled = Get-ChildItem -Path $root -Recurse -File -Filter "*.ini.disabled" -ErrorAction SilentlyContinue |
-              Where-Object { $_.FullName -notmatch '(?i)\\disabled\\' }
-  foreach($d in $disabled){
-    $orig = $d.FullName.Substring(0, $d.FullName.Length - ".disabled".Length)
+  $dirs = Get-SafeDirs $root
+
+  $disabledFiles = @(
+    foreach($d in $dirs){
+      Get-ChildItem -LiteralPath $d.FullName -File -Filter "*.ini.disabled" -Force -ErrorAction SilentlyContinue
+    }
+  )
+
+  foreach($f in $disabledFiles){
+    if(-not $f -or -not $f.FullName){ continue }
+    $orig = $f.FullName.Substring(0, $f.FullName.Length - ".disabled".Length)
+
     if(Test-Path -LiteralPath $orig){ Remove-Item -LiteralPath $orig -Force }
-    Move-Item -LiteralPath $d.FullName -Destination $orig -Force
+    Move-Item -LiteralPath $f.FullName -Destination $orig -Force
     $restored++
   }
 
-  $bakFiles = Get-ChildItem -Path $root -Recurse -File -Filter "DISABLED*.ini" -ErrorAction SilentlyContinue |
-              Where-Object { $_.FullName -notmatch '(?i)\\disabled\\' }
-  foreach($b in $bakFiles){
+  $legacyFiles = @(
+    foreach($d in $dirs){
+      Get-ChildItem -LiteralPath $d.FullName -File -Filter "DISABLED*.ini" -Force -ErrorAction SilentlyContinue
+    }
+  )
+
+  foreach($b in $legacyFiles){
+    if(-not $b -or -not $b.FullName){ continue }
     $origName = $b.Name.Substring("DISABLED".Length)
     $origPath = Join-Path $b.DirectoryName $origName
     Copy-Item -LiteralPath $b.FullName -Destination $origPath -Force
@@ -995,7 +1043,7 @@ function Restore-All {
     $restored++
   }
 
-  $rootInis = Get-ChildItem -Path $root -File -Filter "*.ini" -ErrorAction SilentlyContinue
+  $rootInis = Get-ChildItem -LiteralPath $root -File -Filter "*.ini" -Force -ErrorAction SilentlyContinue
   $deleted = 0
   foreach($ini in $rootInis){
     $t = Get-Content -LiteralPath $ini.FullName -Raw -ErrorAction SilentlyContinue
@@ -1040,16 +1088,32 @@ if($RestoreOne){
   }
 
   $restored = 0
-  $disabled = Get-ChildItem -Path $modDir -Recurse -File -Filter "*.ini.disabled" -ErrorAction SilentlyContinue
-  foreach($d in $disabled){
-    $orig = $d.FullName.Substring(0, $d.FullName.Length - ".disabled".Length)
+
+  $dirs = Get-SafeDirs $modDir
+
+  $disabledFiles = @(
+    foreach($d in $dirs){
+      Get-ChildItem -LiteralPath $d.FullName -File -Filter "*.ini.disabled" -Force -ErrorAction SilentlyContinue
+    }
+  )
+
+  foreach($f in $disabledFiles){
+    if(-not $f -or -not $f.FullName){ continue }
+    $orig = $f.FullName.Substring(0, $f.FullName.Length - ".disabled".Length)
+
     if(Test-Path -LiteralPath $orig){ Remove-Item -LiteralPath $orig -Force }
-    Move-Item -LiteralPath $d.FullName -Destination $orig -Force
+    Move-Item -LiteralPath $f.FullName -Destination $orig -Force
     $restored++
   }
 
-  $legacy = Get-ChildItem -Path $modDir -Recurse -File -Filter "DISABLED*.ini" -ErrorAction SilentlyContinue
-  foreach($b in $legacy){
+  $legacyFiles = @(
+    foreach($d in $dirs){
+      Get-ChildItem -LiteralPath $d.FullName -File -Filter "DISABLED*.ini" -Force -ErrorAction SilentlyContinue
+    }
+  )
+
+  foreach($b in $legacyFiles){
+    if(-not $b -or -not $b.FullName){ continue }
     $origName = $b.Name.Substring("DISABLED".Length)
     $origPath = Join-Path $b.DirectoryName $origName
     Copy-Item -LiteralPath $b.FullName -Destination $origPath -Force
@@ -1079,11 +1143,23 @@ if($RestoreOne){
 # ----------------
 
 if($Add){
-  $packFile = GetSinglePackIniInRoot
+  if([string]::IsNullOrWhiteSpace($PackIni)){
+    $packFile = GetSinglePackIniInRoot
+  } else {
+    $packPath = Join-Path $root $PackIni
+    if(-not (Test-Path -LiteralPath $packPath -PathType Leaf)){
+      throw "Pack ini not found: $PackIni"
+    }
+    if(-not (IsGeneratedPackIni $packPath)){
+      throw "Provided pack ini is not a generated pack ini: $PackIni"
+    }
+    $packFile = Get-Item -LiteralPath $packPath
+  }
+
   $info = ParsePackMods $packFile.FullName
   $packNs = $info.Namespace
 
-  $Detected = @($ModsJoined -split '\|' | ForEach-Object { $_.Trim() } | Where-Object { $_ -ne '' })
+  $Detected = @($ModsJoined -split ';;' | ForEach-Object { $_.Trim() } | Where-Object { $_ -ne '' })
   $Detected = $Detected | Where-Object { Test-Path -LiteralPath (Join-Path $root $_) -PathType Container }
 
   if(-not $Detected -or $Detected.Count -lt 1){
@@ -1120,7 +1196,7 @@ if($Add){
 # --------------
 
 $PackNs = Sanitize $Pack
-$Mods = @($ModsJoined -split '\|' | ForEach-Object { $_.Trim() } | Where-Object { $_ -ne '' })
+$Mods = @($ModsJoined -split ';;' | ForEach-Object { $_.Trim() } | Where-Object { $_ -ne '' })
 if($Mods.Count -lt 1){ throw "Need at least 1 valid mod folder." }
 
 $master = New-Object System.Collections.Generic.List[string]
@@ -1166,4 +1242,3 @@ for($i=0;$i -lt $Mods.Count;$i++){
 Write-Host "OK: Pack ini -> $masterPath"
 Write-Host "OK: Patched mod inis (namespaces + gated overrides)"
 ###PS_END
-
