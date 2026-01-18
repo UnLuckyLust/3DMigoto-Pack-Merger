@@ -3,7 +3,7 @@ setlocal EnableExtensions EnableDelayedExpansion
 title 3DMigoto Mod Pack Merger
 pushd "%~dp0"
 set "ROOT=%CD%"
-set "Version=1.0.3"
+set "Version=1.0.4"
 
 rem ===================================
 rem  USER CONFIG (these can be changed)
@@ -343,7 +343,8 @@ for /f "delims=" %%V in ('set MOD_ 2^>nul') do set "%%V="
 
 set /a COUNT=0
 for /d %%D in (*) do (
-  if exist "%%D\*.ini" (
+  call :HAS_ANY_INI "%%~fD"
+  if not errorlevel 1 (
     set "MOD_!COUNT!=%%~nxD"
     set /a COUNT+=1
   )
@@ -356,8 +357,8 @@ if %COUNT% LSS 1 (
   echo.
   call :TAG ERR "No mod folders found"
   call :TAG DIM "Put this BAT in a folder that contains 1+ mod folders"
-  call :TAG DIM "Each mod folder must contain:"
-  call :TAG DIM "  - one .ini file (mod.ini or similar)"
+  call :TAG DIM "Each mod folder must contain (anywhere inside it):"
+  call :TAG DIM "  - one .ini file (in root OR in subfolders like Body/Ornament)"
   call :TAG DIM "  - a Meshes and/or Textures folder"
   call :WAIT_CLOSE
   exit /b 1
@@ -376,6 +377,17 @@ for /l %%I in (0,1,%END%) do (
   )
 )
 exit /b 0
+
+:HAS_ANY_INI
+setlocal
+for /f "delims=" %%F in ('
+  dir /b /a-d /s "%~1\*.ini" 2^>nul ^
+  ^| findstr /i /v "\.ini\.disabled$" ^
+  ^| findstr /i /v "\\DISABLED.*\.ini$"
+') do (
+  endlocal & exit /b 0
+)
+endlocal & exit /b 1
 
 :RESTART_MSG
 set "RESTART_TYPE=%~1"
