@@ -3,13 +3,14 @@ setlocal EnableExtensions EnableDelayedExpansion
 title 3DMigoto Mod Pack Merger
 pushd "%~dp0"
 set "ROOT=%CD%"
-set "Version=1.0.4"
+set "Version=1.1.0"
 
 rem ===================================
 rem  USER CONFIG (these can be changed)
 rem ===================================
 set "CYCLE_NEXT_KEY=VK_ADD"
 set "CYCLE_PREV_KEY=VK_SUBTRACT"
+set "INCLUDE_VANILLA=1"
 rem ==================================
 
 call :init_ansi
@@ -19,7 +20,7 @@ call :BANNER
 set "DEFAULT_PACK="
 for /f "usebackq delims=" %%P in (`powershell -NoProfile -NoLogo -Command ^
   "$root = '%ROOT%'; " ^
-  "$rx = '(?im)^\s*;\s*#MOD_PACK_ROOT\s+v[0-9]+\.[0-9]+\.[0-9]+'; " ^
+  "$rx = '(?im)^\s*;\s*#MOD_PACK_ROOT\b'; " ^
   "$packs = Get-ChildItem -LiteralPath $root -File -Filter '*.ini' -ErrorAction SilentlyContinue | " ^
   "  Where-Object { try { ([IO.File]::ReadAllText($_.FullName) -match $rx) } catch { $false } }; " ^
   "if($packs.Count -eq 1){ [IO.Path]::GetFileNameWithoutExtension($packs[0].Name) }"`) do set "DEFAULT_PACK=%%P"
@@ -33,7 +34,10 @@ if defined DEFAULT_PACK (
   call :TAG DIM "Example pack name: RoverPack"
   echo.
 )
+set "VSTATE=ON"
+if "%INCLUDE_VANILLA%"=="0" set "VSTATE=OFF"
 call :TAG DIM   "available commands:"
+call :TAG DIM   "  V  = toggle Vanilla in cycle (currently: !VSTATE!)"
 call :TAG DIM   "  A  = add mods to the current pack"
 call :TAG DIM   "  R  = restore all mods"
 call :TAG DIM   "  R1 = restore a single mod"
@@ -43,6 +47,7 @@ set /p "CHAR_NAME=> "
 
 for /f "tokens=* delims= " %%A in ("%CHAR_NAME%") do set "CHAR_NAME=%%A"
 
+if /I "%CHAR_NAME%"=="V"  goto TOGGLE_VANILLA
 if /I "%CHAR_NAME%"=="A"  goto ADD
 if /I "%CHAR_NAME%"=="R"  goto RESTORE
 if /I "%CHAR_NAME%"=="R1" goto RESTORE_ONE
@@ -84,7 +89,7 @@ powershell -NoProfile -NoLogo -NonInteractive -ExecutionPolicy Bypass -Command ^
   "$m = [regex]::Match($bat,'###PS_BEGIN\r?\n(.*?)\r?\n###PS_END','Singleline'); " ^
   "if(-not $m.Success){ throw 'Embedded PS script not found.' } " ^
   "$sb = [scriptblock]::Create($m.Groups[1].Value); " ^
-  "& $sb -Root '%ROOT%' -Pack '%CHAR_NAME%' -ModsJoined '%MODS_JOINED%' -NextKey '%CYCLE_NEXT_KEY%' -PrevKey '%CYCLE_PREV_KEY%' -NextPretty '%NEXT_PRETTY%' -PrevPretty '%PREV_PRETTY%' -PackVersion '%Version%'" ^
+  "& $sb -Root '%ROOT%' -Pack '%CHAR_NAME%' -ModsJoined '%MODS_JOINED%' -IncludeVanilla %INCLUDE_VANILLA% -NextKey '%CYCLE_NEXT_KEY%' -PrevKey '%CYCLE_PREV_KEY%' -NextPretty '%NEXT_PRETTY%' -PrevPretty '%PREV_PRETTY%' -PackVersion '%Version%'" ^
   1>"%LOG_OUT%" 2>"%LOG_ERR%"
 endlocal
 
@@ -108,6 +113,14 @@ rem ==============
 rem user functions
 rem ==============
 
+:TOGGLE_VANILLA
+if "%INCLUDE_VANILLA%"=="1" (
+  set "INCLUDE_VANILLA=0"
+) else (
+  set "INCLUDE_VANILLA=1"
+)
+goto RESTART
+
 :ADD
 echo.
 call :TAG WARN "ADD MODS: will add missing mod folders into the current pack"
@@ -120,7 +133,7 @@ set "PACK_INI_COUNT=0"
 for /f "usebackq delims=" %%F in (`powershell -NoProfile -NoLogo -Command ^
   "$files = Get-ChildItem -LiteralPath '%ROOT%' -Filter *.ini -File | Where-Object { " ^
   "  try { $t = Get-Content -LiteralPath $_.FullName -Raw; " ^
-  "        ($t -match '(?im)^\s*;\s*#MOD_PACK_ROOT\s+v[0-9]+\.[0-9]+\.[0-9]+') -and ($t -match '(?im)^\s*\[KeyPackCycle\]\s*$') } catch { $false }" ^
+  "        ($t -match '(?im)^\s*;\s*#MOD_PACK_ROOT\b') -and ($t -match '(?im)^\s*\[KeyPackCycle\]\s*$') } catch { $false }" ^
   "}; " ^
   "$files | ForEach-Object { $_.Name }"`) do (
   set /a PACK_INI_COUNT+=1
@@ -144,7 +157,7 @@ if not "!PACK_INI_COUNT!"=="1" (
   powershell -NoProfile -NoLogo -Command ^
     "Get-ChildItem -LiteralPath '%ROOT%' -Filter *.ini -File | Where-Object { " ^
     "  try { $t = Get-Content -LiteralPath $_.FullName -Raw; " ^
-    "        ($t -match '(?im)^\s*;\s*#MOD_PACK_ROOT\s+v[0-9]+\.[0-9]+\.[0-9]+') -and ($t -match '(?im)^\s*\[KeyPackCycle\]\s*$') } catch { $false }" ^
+    "        ($t -match '(?im)^\s*;\s*#MOD_PACK_ROOT\b') -and ($t -match '(?im)^\s*\[KeyPackCycle\]\s*$') } catch { $false }" ^
     "} | ForEach-Object { '  - ' + $_.Name }"
   call :TAG DIM "Keep ONLY one pack ini in this folder, then try again."
   echo.
@@ -681,6 +694,8 @@ param(
   [string]$Pack,
   [string]$ModsJoined,
 
+  [int]$IncludeVanilla = 1,
+
   [switch]$Restore,
   [switch]$Add,
 
@@ -703,6 +718,7 @@ if(Test-Path -LiteralPath $root -PathType Leaf){
 $utf8NoBom = [System.Text.UTF8Encoding]::new($false)
 
 $swapvar = "swapvar"
+$packActiveVar = "pack_active"
 
 function Sanitize([string]$s){
   if([string]::IsNullOrWhiteSpace($s)){ return "Pack" }
@@ -726,7 +742,7 @@ if($RestoreOne -and [string]::IsNullOrWhiteSpace($ModFolder)){
 function IsGeneratedPackIni([string]$path){
   try{
     $t = [System.IO.File]::ReadAllText($path)
-    return ($t -match '(?im)^\s*;\s*#MOD_PACK_ROOT\s+v[0-9]+\.[0-9]+\.[0-9]+') -and
+    return ($t -match '(?im)^\s*;\s*#MOD_PACK_ROOT\b') -and
            ($t -match '(?im)^\s*\[KeyPackCycle\]\s*$')
   } catch { return $false }
 }
@@ -745,6 +761,14 @@ function GetSinglePackIniInRoot(){
 function ParsePackMods([string]$packPath){
   $t = [System.IO.File]::ReadAllText($packPath).Replace("`r`n","`n").Replace("`r","`n")
   $lines = $t -split "`n"
+
+  $includeVanilla = $false
+  foreach($l in $lines){
+    if($l -match '^\s*;\s*#MOD_PACK_ROOT\b'){
+      if($l -match '(?i)#VanillaIncluded\b'){ $includeVanilla = $true }
+      break
+    }
+  }
 
   $ns = $null
   foreach($l in $lines){
@@ -780,13 +804,14 @@ function ParsePackMods([string]$packPath){
     NextKey   = $nk
     PrevKey   = $pk
     Mods      = $mods
+    IncludeVanilla  = $includeVanilla
   }
 }
 
 function IsPackRootIni([string]$path){
   try{
     $t = [System.IO.File]::ReadAllText($path)
-    return ($t -match '(?im)^\s*;\s*#MOD_PACK_ROOT\s+v[0-9]+\.[0-9]+\.[0-9]+')
+    return ($t -match '(?im)^\s*;\s*#MOD_PACK_ROOT\b')
   } catch { return $false }
 }
 
@@ -812,18 +837,22 @@ function CleanupOldPackRootInis([string]$keepFullPath){
   return $deleted
 }
 
-function WritePackIni([string]$packPath, [string]$packNs, [object[]]$mods, [string]$nk, [string]$pk){
+function WritePackIni([string]$packPath, [string]$packNs, [object[]]$mods, [string]$nk, [string]$pk, [bool]$includeVanilla){
   if([string]::IsNullOrWhiteSpace($nk)){ $nk = $NextKey }
   if([string]::IsNullOrWhiteSpace($pk)){ $pk = $PrevKey }
 
-  $cycle = @("0") + ($mods | Sort-Object Index | ForEach-Object { [string]$_.Index })
+  $cycle = @()
+  if($includeVanilla){ $cycle += "0" }
+  $cycle += ($mods | Sort-Object Index | ForEach-Object { [string]$_.Index })
 
   $L = New-Object System.Collections.Generic.List[string]
   $L.Add("; " + ([System.IO.Path]::GetFileNameWithoutExtension($packPath)) + " Mod Pack")
   $L.Add("; Use " + $NextPretty + " or " + $PrevPretty + " to cycle mods")
   $L.Add(";")
   $L.Add("; Total mods in this pack: " + $mods.Count)
-  $L.Add(";    0 = Vanilla (no mod)")
+  if($includeVanilla){
+    $L.Add(";    0 = Vanilla (no mod)")
+  }
   foreach($m in ($mods | Sort-Object Index)){
     $L.Add(";    " + $m.Index + " = " + $m.Name)
   }
@@ -834,9 +863,16 @@ function WritePackIni([string]$packPath, [string]$packNs, [object[]]$mods, [stri
   $L.Add("namespace = " + $packNs + "\Master")
   $L.Add("")
   $L.Add("[Constants]")
-  $L.Add("global persist $" + $swapvar + " = 0")
+  $defaultSwap = 1
+  if($includeVanilla){ $defaultSwap = 0 }
+  $L.Add("global persist $" + $swapvar + " = " + $defaultSwap)
+  $L.Add("global $" + $packActiveVar + " = 0")
+  $L.Add("")
+  $L.Add("[Present]")
+  $L.Add("post $" + $packActiveVar + " = 0")
   $L.Add("")
   $L.Add("[KeyPackCycle]")
+  $L.Add("condition = $" + $packActiveVar + " == 1")
   $L.Add("key = " + $nk)
   $L.Add("back = " + $pk)
   $L.Add("type = cycle")
@@ -844,7 +880,10 @@ function WritePackIni([string]$packPath, [string]$packNs, [object[]]$mods, [stri
   $L.Add("")
   $L.Add("; ==========================================================")
   $L.Add("; IMPORTANT: Do not DELETE or MODIFY the line below!")
-  $L.Add("; #MOD_PACK_ROOT v$PackVersion by UnLuckyLust")
+  $vanillaTag = ""
+  if($includeVanilla){ $vanillaTag = " #VanillaIncluded" }
+  $L.Add("; #MOD_PACK_ROOT $vanillaTag")
+  $L.Add("; Mod Pack Merger v$PackVersion by UnLuckyLust")
 
   [System.IO.File]::WriteAllText($packPath, ($L -join "`n"), $utf8NoBom)
 }
@@ -902,7 +941,8 @@ function Patch-Ini([string]$iniPath, [string]$packNs, [string]$modNs, [int]$idx)
   $armed      = $false
   $didIf      = $false
 
-  $ifLine = "if `$\" + $packNs + "\Master\$$swapvar == $idx"
+  $ifLine = "if `$\" + $packNs + "\Master\" + $swapvar + " == $idx"
+  $activeLine = "$\" + $packNs + "\Master\" + $packActiveVar + " = 1"
 
   foreach($line in $lines){
     $m = $rxSection.Match($line)
@@ -914,6 +954,9 @@ function Patch-Ini([string]$iniPath, [string]$packNs, [string]$modNs, [int]$idx)
       }
 
       $sectionName = $m.Groups["name"].Value
+      $setActiveInThisSection =
+      $sectionName -match '^(?i)TextureOverride.*Component' -or
+      $sectionName -match '^(?i)ShaderOverride.*Component'
       $isOverride =
         $sectionName.StartsWith("TextureOverride", [System.StringComparison]::OrdinalIgnoreCase) -or
         $sectionName.StartsWith("ShaderOverride",  [System.StringComparison]::OrdinalIgnoreCase)
@@ -928,6 +971,11 @@ function Patch-Ini([string]$iniPath, [string]$packNs, [string]$modNs, [int]$idx)
     if($isOverride -and $armed -and $rxHash.IsMatch($line)){
       $out.Add($line)
       $out.Add('match_priority = ' + $idx)
+
+      if($setActiveInThisSection){
+        $out.Add($activeLine)
+      }
+
       $out.Add($ifLine)
       $didIf = $true
       $armed = $false
@@ -1003,7 +1051,7 @@ function Renumber-And-RepatchMods([object]$info){
   $info.Mods = $new
 
   $packFile = GetSinglePackIniInRoot
-  WritePackIni $packFile.FullName $info.Namespace $info.Mods $info.NextKey $info.PrevKey
+  WritePackIni $packFile.FullName $info.Namespace $info.Mods $info.NextKey $info.PrevKey $info.IncludeVanilla
 }
 
 # ----------------
@@ -1059,7 +1107,7 @@ function Restore-All {
   $deleted = 0
   foreach($ini in $rootInis){
     $t = Get-Content -LiteralPath $ini.FullName -Raw -ErrorAction SilentlyContinue
-    if($t -and $t -match '(?im)^\s*;\s*#MOD_PACK_ROOT\s+v[0-9]+\.[0-9]+\.[0-9]+'){
+    if($t -and $t -match '(?im)^\s*;\s*#MOD_PACK_ROOT\b'){
       Remove-Item -LiteralPath $ini.FullName -Force
       $deleted++
     }
@@ -1198,7 +1246,7 @@ if($Add){
     $info.Mods.Add([pscustomobject]@{ Index=$idx; Name=$folder })
   }
 
-  WritePackIni $packFile.FullName $packNs $info.Mods $info.NextKey $info.PrevKey
+  WritePackIni $packFile.FullName $packNs $info.Mods $info.NextKey $info.PrevKey $info.IncludeVanilla
   Write-Output "OK: Added $($missing.Count) mod folder(s): $($missing -join ', ')"
   return
 }
@@ -1216,7 +1264,9 @@ $master.Add("; $PackNs Mod Pack")
 $master.Add("; Use " + $NextPretty + " or " + $PrevPretty + " to cycle mods")
 $master.Add(";")
 $master.Add("; Total mods in this pack: " + $mods.Count)
-$master.Add(";    0 = Vanilla (no mod)")
+if($IncludeVanilla -eq 1){
+  $master.Add(";    0 = Vanilla (no mod)")
+}
 for($i=0;$i -lt $Mods.Count;$i++){
   $master.Add(";    " + ($i+1) + " = " + $Mods[$i])
 }
@@ -1227,17 +1277,31 @@ $master.Add("")
 $master.Add("namespace = " + $PackNs + "\Master")
 $master.Add("")
 $master.Add("[Constants]")
-$master.Add("global persist $" + $swapvar + " = 0")
+$defaultSwap = 1
+if($IncludeVanilla -eq 1){ $defaultSwap = 0 }
+$master.Add("global persist $" + $swapvar + " = " + $defaultSwap)
+$master.Add("global $" + $packActiveVar + " = 0")
+$master.Add("")
+$master.Add("[Present]")
+$master.Add("post $" + $packActiveVar + " = 0")
 $master.Add("")
 $master.Add("[KeyPackCycle]")
+$master.Add("condition = $" + $packActiveVar + " == 1")
 $master.Add("key = " + $NextKey)
 $master.Add("back = " + $PrevKey)
 $master.Add("type = cycle")
-$master.Add("$" + $swapvar + " = " + ((0..$Mods.Count) -join ","))
+if($IncludeVanilla -eq 1){
+  $master.Add("$" + $swapvar + " = " + ((0..$Mods.Count) -join ","))
+} else {
+  $master.Add("$" + $swapvar + " = " + ((1..$Mods.Count) -join ","))
+}
 $master.Add("")
 $master.Add("; ==========================================================")
 $master.Add("; IMPORTANT: Do not DELETE or MODIFY the line below!")
-$master.Add("; #MOD_PACK_ROOT v$PackVersion by UnLuckyLust")
+$vanillaTag = ""
+if($includeVanilla){ $vanillaTag = " #VanillaIncluded" }
+$master.Add("; #MOD_PACK_ROOT $vanillaTag")
+$master.Add("; Mod Pack Merger v$PackVersion by UnLuckyLust")
 
 $masterPath = Join-Path $root ($PackNs + ".ini")
 $deleted = CleanupOldPackRootInis $masterPath
