@@ -1,0 +1,86 @@
+LANG_NAME=한국어
+BANNER_KEYS=게임 중 {0} 또는 {1} 키로 모드를 전환할 수 있습니다
+BANNER_KEYS2=(전환 키는 설정에서 변경할 수 있습니다)
+
+PROMPT_ENTER_PACK=팩 이름을 입력하세요
+FOUND_EXISTING_PACK=기존 팩을 발견했습니다: {0}
+FOUND_EXISTING_PACK_HINT=Enter 키를 눌러 이 팩을 다시 생성하거나, 새 이름을 입력해 새로운 팩을 만드세요
+EXAMPLE_PACK_NAME=팩 이름 예시: RoverPack
+
+AVAILABLE_COMMANDS=사용 가능한 명령어:
+CMD_U=  {0}  = 최신 버전으로 업데이트
+CMD_A=  {0}  = 현재 팩에 모드 추가
+CMD_R=  {0}  = 모든 모드 복원
+CMD_R1=  {0} = 단일 모드 복원
+CMD_V=  {0}  = Vanilla(모드 없음)를 순환 옵션에 추가/제거 (현재 상태: {1})
+CMD_X=  {0}  = 종료
+
+ERR_PACK_EMPTY=팩 이름은 비워둘 수 없습니다!
+
+DETECTED_MODS=총 {0}개의 모드 폴더를 감지했습니다:
+PRESS_KEY_GENERATE=아무 키나 눌러 {0}을(를) 생성하고 모드를 패치하세요...
+MERGING=모드를 하나의 팩으로 병합 중...
+MERGING_HINT=대용량 모드의 경우 시간이 걸릴 수 있습니다
+
+ERR_FAIL_CREATE=모드 팩 생성에 실패했습니다
+ERR_DETAILS_SAVED=오류 세부 정보가 다음 위치에 저장되었습니다: {0}
+
+OK_CREATED=모드 팩이 성공적으로 생성되었습니다
+PUT_FOLDER=이 폴더 전체를 게임의 Mods 폴더에 넣으세요 (모든 하위 폴더 유지)
+
+WARN_ADD=모드 추가: 누락된 모드 폴더를 현재 팩에 추가합니다
+ERR_ADD_FAIL=모드를 팩에 추가하지 못했습니다
+ERR_NO_PACK_INI=이 폴더에서 생성된 팩 ini {0}을(를) 찾을 수 없습니다
+ERR_MULTI_PACK_INI=이 폴더에서 둘 이상의 생성된 팩 ini가 발견되었습니다:
+ERR_KEEP_ONE=이 폴더에 하나의 팩 ini만 남기고 다시 시도하세요.
+OK_ADD_COMPLETE=추가 완료
+
+WARN_RESTORE=모든 모드 복원: {0}을(를) 복원하고 생성된 팩 ini를 삭제합니다
+RESTORING=모든 모드를 복원 중...
+ERR_RESTORE_FAIL=모드 복원에 실패했습니다
+OK_RESTORE_COMPLETE=전체 복원이 완료되었습니다
+
+WARN_RESTORE1=단일 모드 복원: 하나의 모드 폴더에서만 백업을 복원하고 팩 ini를 업데이트합니다
+WARN_RESTORE1_NOTE=주의: 복원 후 해당 모드 폴더를 이 팩 폴더 밖으로 이동하세요!
+WARN_ONLY_ONE=모드가 하나만 감지되었습니다: {0}
+PROMPT_REMOVE_ONE=제거하시겠습니까? (Y/N)
+CANCELED=취소됨
+PROMPT_PICK_REMOVE=제거할 번호를 입력하세요 (1-{0})
+ERR_INVALID_NUM=잘못된 번호입니다 (1-{0} 사용)
+
+WARN_RESTORING_MOD=모드 복원 중: {0}
+INFO_RESTORING_MOD=모드 복원 중: {0}
+ERR_RESTORE1_FAIL=모드 복원에 실패했습니다: {0}
+ERR_RESTORE1_HINT=모드 폴더에 .ini.disabled 파일이 있는지 / 팩에 모드가 존재하는지 확인하세요
+OK_RESTORED_MOD=모드가 복원되었습니다: {0}
+WARN_MOVE_OUT=중요: 이제 {0} 폴더를 이 팩 폴더 밖으로 이동할 수 있습니다
+WARN_CONFLICT=여기에 두면 팩 ini와 충돌합니다!
+
+PRESS_KEY_RESTART=아무 키나 눌러 다시 시작하세요...
+PRESS_KEY_CONTINUE=아무 키나 눌러 계속하세요...
+PRESS_KEY_CLOSE=아무 키나 눌러 종료하세요...
+
+PACK_TITLE={0} 모드 팩
+PACK_CYCLE={0} 또는 {1} 키로 모드를 전환하세요
+PACK_TOTAL=이 팩의 총 모드 수: {0}
+PACK_VANILLA=0 = Vanilla (모드 없음)
+
+ERR_NO_MODS_FOUND=모드 폴더를 찾을 수 없습니다
+ERR_NO_MODS_HINT1=이 BAT 파일을 하나 이상의 모드 폴더가 있는 위치에 두세요
+ERR_NO_MODS_HINT2=각 모드 폴더에는 다음이 포함되어야 합니다:
+ERR_NO_MODS_HINT3=  - 하나의 .ini 파일 (루트 또는 Body/Ornament 같은 하위 폴더)
+ERR_NO_MODS_HINT4=  - Meshes 및/또는 Textures 폴더
+
+PACK_IMPORTANT=중요: 아래의 줄은 삭제하거나 수정하지 마세요!
+
+VERCHK_UNK_LOCAL=로컬 버전을 인식할 수 없습니다
+VERCHK_UNK_REMOTE=버전 확인 실패: 원격 버전을 인식할 수 없습니다
+VERCHK_NEW=새 버전이 있습니다: {0} (현재 {1})
+VERCHK_UNK_VERSION=인식할 수 없는 버전이 감지되었습니다: {0}
+VERCHK_UPDATE_HINT=GameBanana/GitHub에서 최신 버전을 다운로드하거나 {0}를 눌러 업데이트하세요
+UPDATING=업데이트 중...
+UPDATING_HINT=최신 버전 다운로드 중
+UPDATE_FAILED=업데이트 실패
+UPDATE_FAILED_HINT=GameBanana/GitHub에서 최신 버전을 수동으로 다운로드하세요.
+UPDATE_BAD_FILE=다운로드한 파일이 유효하지 않습니다, 다시 시도하거나 수동으로 업데이트하세요
+UPDATE_SUCCESS=최신 버전으로 성공적으로 업데이트되었습니다

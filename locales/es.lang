@@ -1,0 +1,86 @@
+LANG_NAME=Español
+BANNER_KEYS=Usa {0} o {1} para cambiar de mod mientras juegas
+BANNER_KEYS2=(las teclas de ciclo se pueden cambiar en la configuración)
+
+PROMPT_ENTER_PACK=Introduce el nombre del pack
+FOUND_EXISTING_PACK=Se encontró un pack existente: {0}
+FOUND_EXISTING_PACK_HINT=Pulsa Enter para regenerar este pack, o escribe un nuevo nombre para crear un pack nuevo
+EXAMPLE_PACK_NAME=Ejemplo de nombre de pack: RoverPack
+
+AVAILABLE_COMMANDS=comandos disponibles:
+CMD_U=  {0}  = actualizar a la última versión
+CMD_A=  {0}  = añadir mods al pack actual
+CMD_R=  {0}  = restaurar todos los mods
+CMD_R1=  {0} = restaurar un solo mod
+CMD_V=  {0}  = añadir/quitar Vanilla (sin mods) como opción del ciclo (actualmente: {1})
+CMD_X=  {0}  = salir
+
+ERR_PACK_EMPTY=¡El nombre del pack no puede estar vacío!
+
+DETECTED_MODS=Se detectaron {0} carpetas de mods:
+PRESS_KEY_GENERATE=Pulsa cualquier tecla para generar {0} y parchear los mods...
+MERGING=Fusionando mods en un solo pack...
+MERGING_HINT=Esto puede tardar un poco con mods grandes
+
+ERR_FAIL_CREATE=No se pudo crear el pack de mods
+ERR_DETAILS_SAVED=Detalles del error guardados en: {0}
+
+OK_CREATED=Pack de mods creado correctamente
+PUT_FOLDER=Pon esta carpeta completa en la carpeta Mods del juego (mantén todas las subcarpetas)
+
+WARN_ADD=AÑADIR MODS: añadirá las carpetas de mods que falten al pack actual
+ERR_ADD_FAIL=No se pudieron añadir mods al pack
+ERR_NO_PACK_INI=No se encontró ningún ini de pack generado {0} en esta carpeta
+ERR_MULTI_PACK_INI=Se encontró más de un ini de pack generado en esta carpeta:
+ERR_KEEP_ONE=Mantén SOLO un ini de pack en esta carpeta y vuelve a intentarlo.
+OK_ADD_COMPLETE=Adición completada
+
+WARN_RESTORE=RESTAURAR TODOS LOS MODS: restaurará {0} y eliminará los ini(s) de pack generado(s)
+RESTORING=Restaurando todos los mods...
+ERR_RESTORE_FAIL=No se pudieron restaurar los mods
+OK_RESTORE_COMPLETE=Restauración completa finalizada
+
+WARN_RESTORE1=RESTAURAR UN MOD: restaura copias de seguridad solo en UNA carpeta de mod + actualiza el ini del pack
+WARN_RESTORE1_NOTE=NOTA: después de restaurar, ¡mueve la carpeta del mod FUERA de esta carpeta de pack!
+WARN_ONLY_ONE=Solo se detectó un mod: {0}
+PROMPT_REMOVE_ONE=¿Eliminarlo? (Y/N)
+CANCELED=Cancelado
+PROMPT_PICK_REMOVE=Introduce el número para eliminar (1-{0})
+ERR_INVALID_NUM=Número no válido (usa 1-{0})
+
+WARN_RESTORING_MOD=Restaurando mod: {0}
+INFO_RESTORING_MOD=Restaurando mod: {0}
+ERR_RESTORE1_FAIL=No se pudo restaurar el mod: {0}
+ERR_RESTORE1_HINT=Asegúrate de que exista el archivo .ini.disabled en la carpeta del mod / que el mod exista en el pack
+OK_RESTORED_MOD=Mod restaurado: {0}
+WARN_MOVE_OUT=IMPORTANTE: Ahora puedes mover la carpeta {0} FUERA de esta carpeta de pack
+WARN_CONFLICT=Si la dejas aquí, entrará en conflicto con el ini del pack
+
+PRESS_KEY_RESTART=Pulsa cualquier tecla para reiniciar...
+PRESS_KEY_CONTINUE=Pulsa cualquier tecla para continuar...
+PRESS_KEY_CLOSE=Pulsa cualquier tecla para cerrar...
+
+PACK_TITLE=Pack de Mods {0}
+PACK_CYCLE=Usa {0} o {1} para cambiar de mod
+PACK_TOTAL=Total de mods en este pack: {0}
+PACK_VANILLA=0 = Vanilla (sin mod)
+
+ERR_NO_MODS_FOUND=No se encontraron carpetas de mods
+ERR_NO_MODS_HINT1=Coloca este BAT en una carpeta que contenga 1+ carpetas de mods
+ERR_NO_MODS_HINT2=Cada carpeta de mod debe contener (en cualquier parte dentro):
+ERR_NO_MODS_HINT3=  - un archivo .ini (en la raíz O en subcarpetas como Body/Ornament)
+ERR_NO_MODS_HINT4=  - una carpeta Meshes y/o Textures
+
+PACK_IMPORTANT=IMPORTANTE: ¡No BORRES ni MODIFIQUES las líneas de abajo!
+
+VERCHK_UNK_LOCAL=Versión local no reconocida
+VERCHK_UNK_REMOTE=Falló la comprobación de versión: versión remota no reconocida
+VERCHK_NEW=Nueva versión disponible: {0} (tienes {1})
+VERCHK_UNK_VERSION=Versión no reconocida detectada: {0}
+VERCHK_UPDATE_HINT=Descarga la última versión desde GameBanana/GitHub o pulsa {0} para actualizar
+UPDATING=Actualizando...
+UPDATING_HINT=Descargando la última versión
+UPDATE_FAILED=La actualización falló
+UPDATE_FAILED_HINT=Descarga la última versión manualmente desde GameBanana/GitHub
+UPDATE_BAD_FILE=El archivo descargado no es válido, Intenta de nuevo o actualiza manualmente
+UPDATE_SUCCESS=Actualizado correctamente a la última versión

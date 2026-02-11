@@ -1,0 +1,86 @@
+LANG_NAME=Português (Brasil)
+BANNER_KEYS=Use {0} ou {1} para alternar os mods durante o jogo
+BANNER_KEYS2=(as teclas de ciclo podem ser alteradas nas configurações)
+
+PROMPT_ENTER_PACK=Digite o nome do pack
+FOUND_EXISTING_PACK=Pack existente encontrado: {0}
+FOUND_EXISTING_PACK_HINT=Pressione Enter para regerar este pack ou digite um novo nome para criar um novo pack
+EXAMPLE_PACK_NAME=Exemplo de nome do pack: RoverPack
+
+AVAILABLE_COMMANDS=comandos disponíveis:
+CMD_U=  {0}  = atualizar para a versão mais recente
+CMD_A=  {0}  = adicionar mods ao pack atual
+CMD_R=  {0}  = restaurar todos os mods
+CMD_R1=  {0} = restaurar um único mod
+CMD_V=  {0}  = adicionar/remover Vanilla (sem mods) como opção no ciclo (atualmente: {1})
+CMD_X=  {0}  = sair
+
+ERR_PACK_EMPTY=O nome do pack não pode estar vazio!
+
+DETECTED_MODS={0} pastas de mods detectadas:
+PRESS_KEY_GENERATE=Pressione qualquer tecla para gerar {0} e aplicar patches nos mods...
+MERGING=Mesclando mods em um único pack...
+MERGING_HINT=Isso pode levar um tempo com mods grandes
+
+ERR_FAIL_CREATE=Falha ao criar o pack de mods
+ERR_DETAILS_SAVED=Detalhes do erro salvos em: {0}
+
+OK_CREATED=Pack de mods criado com sucesso
+PUT_FOLDER=Coloque esta pasta inteira na pasta Mods do jogo (mantenha todas as subpastas)
+
+WARN_ADD=ADICIONAR MODS: adicionará pastas de mods ausentes ao pack atual
+ERR_ADD_FAIL=Falha ao adicionar mods ao pack
+ERR_NO_PACK_INI=Nenhum ini de pack gerado {0} foi encontrado nesta pasta
+ERR_MULTI_PACK_INI=Mais de um ini de pack gerado foi encontrado nesta pasta:
+ERR_KEEP_ONE=Mantenha APENAS um ini de pack nesta pasta e tente novamente.
+OK_ADD_COMPLETE=Adição concluída
+
+WARN_RESTORE=RESTAURAR TODOS OS MODS: restaurará {0} e excluirá o(s) ini(s) de pack gerado(s)
+RESTORING=Restaurando todos os mods...
+ERR_RESTORE_FAIL=Falha ao restaurar os mods
+OK_RESTORE_COMPLETE=Restauração completa concluída
+
+WARN_RESTORE1=RESTAURAR UM MOD: restaura backups apenas em UMA pasta de mod + atualiza o ini do pack
+WARN_RESTORE1_NOTE=NOTA: após restaurar, mova a pasta do mod PARA FORA desta pasta de pack!
+WARN_ONLY_ONE=Apenas um mod detectado: {0}
+PROMPT_REMOVE_ONE=Remover? (Y/N)
+CANCELED=Cancelado
+PROMPT_PICK_REMOVE=Digite o número para remover (1-{0})
+ERR_INVALID_NUM=Número inválido (use 1-{0})
+
+WARN_RESTORING_MOD=Restaurando mod: {0}
+INFO_RESTORING_MOD=Restaurando mod: {0}
+ERR_RESTORE1_FAIL=Falha ao restaurar o mod: {0}
+ERR_RESTORE1_HINT=Certifique-se de que exista o arquivo .ini.disabled na pasta do mod / que o mod exista no pack
+OK_RESTORED_MOD=Mod restaurado: {0}
+WARN_MOVE_OUT=IMPORTANTE: Agora você pode mover a pasta {0} PARA FORA desta pasta de pack
+WARN_CONFLICT=Se você deixá-la aqui, ela entrará em conflito com o ini do pack
+
+PRESS_KEY_RESTART=Pressione qualquer tecla para reiniciar...
+PRESS_KEY_CONTINUE=Pressione qualquer tecla para continuar...
+PRESS_KEY_CLOSE=Pressione qualquer tecla para fechar...
+
+PACK_TITLE=Pack de Mods {0}
+PACK_CYCLE=Use {0} ou {1} para alternar os mods
+PACK_TOTAL=Total de mods neste pack: {0}
+PACK_VANILLA=0 = Vanilla (sem mod)
+
+ERR_NO_MODS_FOUND=Nenhuma pasta de mod encontrada
+ERR_NO_MODS_HINT1=Coloque este BAT em uma pasta que contenha 1+ pastas de mods
+ERR_NO_MODS_HINT2=Cada pasta de mod deve conter (em qualquer lugar dentro):
+ERR_NO_MODS_HINT3=  - um arquivo .ini (na raiz OU em subpastas como Body/Ornament)
+ERR_NO_MODS_HINT4=  - uma pasta Meshes e/ou Textures
+
+PACK_IMPORTANT=IMPORTANTE: Não EXCLUA nem MODIFIQUE as linhas abaixo!
+
+VERCHK_UNK_LOCAL=Versão local não reconhecida
+VERCHK_UNK_REMOTE=Falha na verificação de versão: versão remota não reconhecida
+VERCHK_NEW=Nova versão disponível: {0} (você tem {1})
+VERCHK_UNK_VERSION=Versão não reconhecida detectada: {0}
+VERCHK_UPDATE_HINT=Baixe a versão mais recente no GameBanana/GitHub ou pressione {0} para atualizar
+UPDATING=Atualizando...
+UPDATING_HINT=Baixando a versão mais recente
+UPDATE_FAILED=Falha na atualização
+UPDATE_FAILED_HINT=Baixe a versão mais recente manualmente no GameBanana/GitHub
+UPDATE_BAD_FILE=O arquivo baixado parece inválido, Tente novamente ou atualize manualmente
+UPDATE_SUCCESS=Atualizado com sucesso para a versão mais recente

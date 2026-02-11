@@ -1,0 +1,86 @@
+LANG_NAME=日本語
+BANNER_KEYS=ゲーム中に {0} または {1} を使用してモッドを切り替えます
+BANNER_KEYS2=(切り替えキーは設定で変更できます)
+
+PROMPT_ENTER_PACK=パック名を入力してください
+FOUND_EXISTING_PACK=既存のパックが見つかりました: {0}
+FOUND_EXISTING_PACK_HINT=Enterキーを押してこのパックを再生成するか、新しい名前を入力して新規パックを作成してください
+EXAMPLE_PACK_NAME=パック名の例: RoverPack
+
+AVAILABLE_COMMANDS=使用可能なコマンド:
+CMD_U=  {0}  = 最新バージョンに更新
+CMD_A=  {0}  = 現在のパックにモッドを追加
+CMD_R=  {0}  = すべてのモッドを復元
+CMD_R1=  {0} = 単一のモッドを復元
+CMD_V=  {0}  = Vanilla（モッドなし）をサイクル選択に追加／削除（現在: {1}）
+CMD_X=  {0}  = 終了
+
+ERR_PACK_EMPTY=パック名は空にできません！
+
+DETECTED_MODS={0} 個のモッドフォルダが検出されました:
+PRESS_KEY_GENERATE=任意のキーを押して {0} を生成し、モッドをパッチしてください...
+MERGING=モッドを1つのパックに統合中...
+MERGING_HINT=大きなモッドの場合、時間がかかることがあります
+
+ERR_FAIL_CREATE=モッドパックの作成に失敗しました
+ERR_DETAILS_SAVED=エラーの詳細は次の場所に保存されました: {0}
+
+OK_CREATED=モッドパックが正常に作成されました
+PUT_FOLDER=このフォルダ全体をゲームの Mods フォルダに配置してください（すべてのサブフォルダを保持）
+
+WARN_ADD=モッド追加: 不足しているモッドフォルダを現在のパックに追加します
+ERR_ADD_FAIL=モッドをパックに追加できませんでした
+ERR_NO_PACK_INI=このフォルダに生成されたパック ini {0} が見つかりません
+ERR_MULTI_PACK_INI=このフォルダに複数の生成済みパック ini が見つかりました:
+ERR_KEEP_ONE=このフォルダには1つのパック ini のみ残して、再試行してください。
+OK_ADD_COMPLETE=追加が完了しました
+
+WARN_RESTORE=すべてのモッドを復元: {0} を復元し、生成されたパック ini を削除します
+RESTORING=すべてのモッドを復元中...
+ERR_RESTORE_FAIL=モッドの復元に失敗しました
+OK_RESTORE_COMPLETE=完全な復元が完了しました
+
+WARN_RESTORE1=単一モッド復元: 1つのモッドフォルダのみバックアップを復元し、パック ini を更新します
+WARN_RESTORE1_NOTE=注意: 復元後、このモッドフォルダをパックフォルダの外に移動してください！
+WARN_ONLY_ONE=検出されたモッドは1つのみです: {0}
+PROMPT_REMOVE_ONE=削除しますか？ (Y/N)
+CANCELED=キャンセル
+PROMPT_PICK_REMOVE=削除する番号を入力してください (1-{0})
+ERR_INVALID_NUM=無効な番号です (1-{0} を使用してください)
+
+WARN_RESTORING_MOD=モッドを復元中: {0}
+INFO_RESTORING_MOD=モッドを復元中: {0}
+ERR_RESTORE1_FAIL=モッドの復元に失敗しました: {0}
+ERR_RESTORE1_HINT=モッドフォルダに .ini.disabled ファイルが存在するか / パック内にモッドが存在するか確認してください
+OK_RESTORED_MOD=モッドが復元されました: {0}
+WARN_MOVE_OUT=重要: {0} フォルダをこのパックフォルダの外に移動できます
+WARN_CONFLICT=ここに残すとパック ini と競合します！
+
+PRESS_KEY_RESTART=任意のキーを押して再起動...
+PRESS_KEY_CONTINUE=任意のキーを押して続行...
+PRESS_KEY_CLOSE=任意のキーを押して終了...
+
+PACK_TITLE={0} モッドパック
+PACK_CYCLE={0} または {1} を使用してモッドを切り替えます
+PACK_TOTAL=このパック内のモッド数: {0}
+PACK_VANILLA=0 = Vanilla（モッドなし）
+
+ERR_NO_MODS_FOUND=モッドフォルダが見つかりません
+ERR_NO_MODS_HINT1=この BAT を1つ以上のモッドフォルダがある場所に配置してください
+ERR_NO_MODS_HINT2=各モッドフォルダには以下が含まれている必要があります:
+ERR_NO_MODS_HINT3=  - 1つの .ini ファイル（ルートまたは Body / Ornament などのサブフォルダ）
+ERR_NO_MODS_HINT4=  - Meshes および/または Textures フォルダ
+
+PACK_IMPORTANT=重要: 以下の行は削除または変更しないでください！
+
+VERCHK_UNK_LOCAL=ローカルバージョンを認識できません
+VERCHK_UNK_REMOTE=バージョン確認に失敗しました：リモートバージョンを認識できません
+VERCHK_NEW=新しいバージョンがあります：{0}（現在 {1}）
+VERCHK_UNK_VERSION=認識できないバージョンが検出されました：{0}
+VERCHK_UPDATE_HINT=GameBanana/GitHubから最新版をダウンロードするか、{0}を押して更新してください
+UPDATING=更新中...
+UPDATING_HINT=最新バージョンをダウンロード中
+UPDATE_FAILED=更新に失敗しました
+UPDATE_FAILED_HINT=GameBanana/GitHubから最新版を手動でダウンロードしてください。
+UPDATE_BAD_FILE=ダウンロードしたファイルが無効です、再試行するか手動で更新してください
+UPDATE_SUCCESS=最新バージョンに正常に更新されました

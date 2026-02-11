@@ -1,0 +1,86 @@
+LANG_NAME=English
+BANNER_KEYS=Use {0} or {1} to cycle mods while in-game
+BANNER_KEYS2=(cycle keys can be changed in config)
+
+PROMPT_ENTER_PACK=Enter pack name
+FOUND_EXISTING_PACK=Found existing pack: {0}
+FOUND_EXISTING_PACK_HINT=Press Enter to regenerate this pack, or type a new name to create a new pack
+EXAMPLE_PACK_NAME=Example pack name: RoverPack
+
+AVAILABLE_COMMANDS=available commands:
+CMD_U=  {0}  = update to latest version
+CMD_A=  {0}  = add mods to the current pack
+CMD_R=  {0}  = restore all mods
+CMD_R1=  {0} = restore a single mod
+CMD_V=  {0}  = add/remove Vanilla (no mods) as cycle option (currently: {1})
+CMD_X=  {0}  = exit
+
+ERR_PACK_EMPTY=Pack Name cannot be empty!
+
+DETECTED_MODS=Detected {0} mod folders:
+PRESS_KEY_GENERATE=Press any key to generate {0} and patch mods...
+MERGING=Merging mods into one pack...
+MERGING_HINT=This may take a bit on large mods
+
+ERR_FAIL_CREATE=Failed to create mod pack
+ERR_DETAILS_SAVED=Error details saved to: {0}
+
+OK_CREATED=Mod pack created successfully
+PUT_FOLDER=Put this whole folder in the game Mods folder (keep all subfolders)
+
+WARN_ADD=ADD MODS: will add missing mod folders into the current pack
+ERR_ADD_FAIL=Failed to add mods to pack
+ERR_NO_PACK_INI=No generated pack ini {0} was found in this folder
+ERR_MULTI_PACK_INI=More than one generated pack ini was found in this folder:
+ERR_KEEP_ONE=Keep ONLY one pack ini in this folder, then try again.
+OK_ADD_COMPLETE=Add complete
+
+WARN_RESTORE=RESTORE ALL MODS: will restore {0} and delete generated pack ini(s)
+RESTORING=Restoring all mods...
+ERR_RESTORE_FAIL=Failed to restore mods
+OK_RESTORE_COMPLETE=Full restore completed
+
+WARN_RESTORE1=RESTORE ONE MOD: restore backups only in ONE mod folder + update pack ini
+WARN_RESTORE1_NOTE=NOTE: after restoring, move the mod folder OUT of this pack folder!
+WARN_ONLY_ONE=Only one mod detected: {0}
+PROMPT_REMOVE_ONE=Remove it? (Y/N)
+CANCELED=Canceled
+PROMPT_PICK_REMOVE=Enter number to remove (1-{0})
+ERR_INVALID_NUM=Invalid number (use 1-{0})
+
+WARN_RESTORING_MOD=Restoring mod: {0}
+INFO_RESTORING_MOD=Restoring mod: {0}
+ERR_RESTORE1_FAIL=Failed to restore mod: {0}
+ERR_RESTORE1_HINT=Make sure there is .ini.disabled file in the mod folder / mod exists in the pack
+OK_RESTORED_MOD=Restored mod: {0}
+WARN_MOVE_OUT=IMPORTANT: You can now move the {0} folder OUT of this pack folder
+WARN_CONFLICT=If you leave it here, it will conflict with the pack ini!
+
+PRESS_KEY_RESTART=Press any key to restart...
+PRESS_KEY_CONTINUE=Press any key to continue...
+PRESS_KEY_CLOSE=Press any key to close...
+
+PACK_TITLE={0} Mod Pack
+PACK_CYCLE=Use {0} or {1} to cycle mods
+PACK_TOTAL=Total mods in this pack: {0}
+PACK_VANILLA=0 = Vanilla (no mod)
+
+ERR_NO_MODS_FOUND=No mod folders found
+ERR_NO_MODS_HINT1=Put this BAT in a folder that contains 1+ mod folders
+ERR_NO_MODS_HINT2=Each mod folder must contain (anywhere inside it):
+ERR_NO_MODS_HINT3=  - one .ini file (in root OR in subfolders like Body/Ornament)
+ERR_NO_MODS_HINT4=  - a Meshes and/or Textures folder
+
+PACK_IMPORTANT=IMPORTANT: Do not DELETE or MODIFY the lines below!
+
+VERCHK_UNK_LOCAL=Unrecognized local version
+VERCHK_UNK_REMOTE=Version check failed, unrecognized remote version
+VERCHK_NEW=New version available: {0} (you have {1})
+VERCHK_UNK_VERSION=Unrecognized version detected: {0}
+VERCHK_UPDATE_HINT=Download the latest version from GameBanana/GitHub, Or press {0} to update
+UPDATING=Updating...
+UPDATING_HINT=Downloading the latest version
+UPDATE_FAILED=Update failed
+UPDATE_FAILED_HINT=Please download the latest version manually from GameBanana/GitHub
+UPDATE_BAD_FILE=Downloaded file looks invalid, Try again or update manually
+UPDATE_SUCCESS=Successfully updated to the latest version

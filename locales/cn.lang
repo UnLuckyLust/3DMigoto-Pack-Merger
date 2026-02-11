@@ -1,0 +1,86 @@
+LANG_NAME=简体中文
+BANNER_KEYS=使用 {0} 或 {1} 在游戏中切换模组
+BANNER_KEYS2=（可在配置中更改切换按键）
+
+PROMPT_ENTER_PACK=输入包名称
+FOUND_EXISTING_PACK=发现已有包：{0}
+FOUND_EXISTING_PACK_HINT=按 Enter 重新生成此模组包，或输入新名称以创建新的模组包
+EXAMPLE_PACK_NAME=示例包名称：RoverPack
+
+AVAILABLE_COMMANDS=可用命令：
+CMD_U=  {0}  = 更新到最新版本
+CMD_A=  {0}  = 将模组添加到当前包
+CMD_R=  {0}  = 还原所有模组
+CMD_R1=  {0} = 还原单个模组
+CMD_V=  {0}  = 将原版（无模组）添加/移除为循环选项（当前：{1}）
+CMD_X=  {0}  = 退出
+
+ERR_PACK_EMPTY=包名称不能为空！
+
+DETECTED_MODS=检测到 {0} 个模组文件夹：
+PRESS_KEY_GENERATE=按任意键生成 {0} 并修补模组…
+MERGING=正在合并模组到一个包中…
+MERGING_HINT=大型模组可能需要一些时间
+
+ERR_FAIL_CREATE=创建模组包失败
+ERR_DETAILS_SAVED=错误详情已保存到：{0}
+
+OK_CREATED=模组包创建成功
+PUT_FOLDER=将整个文件夹放入游戏 Mods 目录（保留所有子文件夹）
+
+WARN_ADD=添加模组：将缺失的模组文件夹添加到当前包中
+ERR_ADD_FAIL=添加模组到包失败
+ERR_NO_PACK_INI=在此文件夹中未找到生成的包文件 {0}
+ERR_MULTI_PACK_INI=在此文件夹中找到多个生成的包文件：
+ERR_KEEP_ONE=请只保留一个包文件，然后再试一次。
+OK_ADD_COMPLETE=添加完成
+
+WARN_RESTORE=还原所有模组：将还原 {0} 并删除生成的包文件
+RESTORING=正在还原所有模组…
+ERR_RESTORE_FAIL=还原模组失败
+OK_RESTORE_COMPLETE=已完成全部还原
+
+WARN_RESTORE1=还原单个模组：仅还原一个模组文件夹中的备份并更新包文件
+WARN_RESTORE1_NOTE=注意：还原后请将该模组文件夹移出此包文件夹！
+WARN_ONLY_ONE=仅检测到一个模组：{0}
+PROMPT_REMOVE_ONE=要移除它吗？（Y/N）
+CANCELED=已取消
+PROMPT_PICK_REMOVE=输入要移除的编号（1-{0}）
+ERR_INVALID_NUM=编号无效（请使用 1-{0}）
+
+WARN_RESTORING_MOD=正在还原模组：{0}
+INFO_RESTORING_MOD=正在还原模组：{0}
+ERR_RESTORE1_FAIL=还原模组失败：{0}
+ERR_RESTORE1_HINT=请确认该模组文件夹中存在 .ini.disabled 文件 / 该模组在包内
+OK_RESTORED_MOD=已还原模组：{0}
+WARN_MOVE_OUT=重要：现在你可以将 {0} 文件夹移出此包文件夹
+WARN_CONFLICT=如果仍留在此处，会与包文件冲突！
+
+PRESS_KEY_RESTART=按任意键重新开始…
+PRESS_KEY_CONTINUE=按任意键继续…
+PRESS_KEY_CLOSE=按任意键关闭…
+
+PACK_TITLE={0} 模组包
+PACK_CYCLE=使用 {0} 或 {1} 切换模组
+PACK_TOTAL=此包中的模组总数：{0}
+PACK_VANILLA=0 = 原版（无模组）
+
+ERR_NO_MODS_FOUND=未找到任何模组文件夹
+ERR_NO_MODS_HINT1=请将此 BAT 放在包含 1 个以上模组文件夹的目录中
+ERR_NO_MODS_HINT2=每个模组文件夹必须包含（目录内任意位置均可）：
+ERR_NO_MODS_HINT3=  - 一个 .ini 文件（在根目录或 Body/Ornament 等子目录中）
+ERR_NO_MODS_HINT4=  - Meshes 和/或 Textures 文件夹
+
+PACK_IMPORTANT=重要：请勿删除或修改下面的行！
+
+VERCHK_UNK_LOCAL=本地版本无法识别
+VERCHK_UNK_REMOTE=版本检查失败：远程版本无法识别
+VERCHK_NEW=发现新版本：{0}（当前为 {1}）
+VERCHK_UNK_VERSION=检测到无法识别的版本：{0}
+VERCHK_UPDATE_HINT=从 GameBanana/GitHub 下载最新版本，或按 {0} 更新
+UPDATING=正在更新...
+UPDATING_HINT=正在下载最新版本
+UPDATE_FAILED=更新失败
+UPDATE_FAILED_HINT=请从 GameBanana/GitHub 手动下载最新版本
+UPDATE_BAD_FILE=下载的文件无效，请重试或手动更新
+UPDATE_SUCCESS=已成功更新到最新版本
