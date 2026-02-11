@@ -1,36 +1,48 @@
-# 3DMigoto Mod Pack Merger
+# 3DMigoto Mod Pack Merger — Dev Branch
 
-Mod Pack Merger for **3DMigoto game mods**.
-</br>This tool merges multiple standalone mods into **one clean, switchable pack** to avoid conflicts, glitches, and duplicated logic.
+⚠️ This is the **development branch** of the 3DMigoto Mod Pack Merger.  
+It may contain experimental features, debugging tools, and unfinished logic.
 
-## What This Tool Does
-- Scans mod folders automatically
-- Merges multiple <ins>.ini mods</ins> into **one root pack**
-- Generates key-based switching (Next / Previous)
-- Prevents conflicts caused by multiple active INI files
-- Designed for **3DMigoto-based mod loaders** (engine-agnostic)
+If you are a normal user, use the [**main / release version**](https://github.com/UnLuckyLust/3DMigoto-Pack-Merger/tree/main) instead.
 
-## How to Use
-1. Place the **batch file** inside a folder that contains all the mod folders you want to merge into one pack
-2. Double-click the Batch file  
-3. Enter a **pack name** when prompted  
-4. The tool will:
-   - Detect mod folders
-   - Edit the ini files of the mods in the pack and create a recovery file for each mod
-   - Generate a **single pack INI**
-5. Move the entire folder to the <ins>Mods</ins> folder in the game Mod Loader
-6. Use the assigned keys in-game to switch between mods (keys can be changed in the config)
-7. After creating the pack, you can run the tool again to ***restore one*** mod from the pack or ***restore all*** together, the tool can also ***add*** mods to the pack that has already been created.
+## What is This Tool?
 
-## Why This Is Needed
-Running multiple active <ins>.ini mods</ins> (for example, different cosmetics for the same character) at the same time can cause:
-- Mesh flickering
-- Animation glitches
-- State desync
-- Broken character swaps
-This tool enforces **one controller, many states** the correct way to use 3DMigoto mod packs.
+3DMigoto Mod Pack Merger allows you to:
 
-## Disclaimer
-This is a tool for combining game mods, it is not a game mod in itself.
-</br>This tool is provided **as is**, without warranty of any kind.  
-Use of game mods is at your own risk.
+• Merge multiple mod folders into one cycle pack  
+• Auto-patch mod INIs (namespace + gated overrides)  
+• Add missing mods to an existing pack  
+• Restore all mods  
+• Restore a single mod  
+• Toggle Vanilla (no mod) as a cycle option  
+• Multi-language support  
+• Clean auto-generated pack INI structure  
+
+## Dev Branch Purpose
+
+This branch exists for:
+
+• Testing new features before release  
+• Version checking logic  
+• Internal improvements and refactors  
+• Performance optimizations  
+• Experimental behavior changes  
+• Debug logging  
+• Structural rewrites  
+
+Things here may:
+
+• Change without notice  
+• Break existing packs  
+• Require manual cleanup  
+• Contain incomplete features  
+
+## Reporting Issues
+
+If something breaks:
+
+• Provide the pack folder structure  
+• Include the generated INI  
+• Include the mod INI that fails  
+• Include error logs from `%TEMP%`  
+• Tell which branch and version you’re using  
